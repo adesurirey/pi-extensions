@@ -15,12 +15,22 @@
  *   This keeps the tool dumb (no ledger, no heuristics) while protecting
  *   names the human chose via /name.
  *
+ * Warp tab sync: pi core updates the tab title on `session_info_changed`, but
+ * @juicesharp/rpiv-warp is ticking the title with a suffix captured at
+ * `agent_start` and pops the pre-rename title in its own `agent_end` — both
+ * clobber the rename when it happens mid-run (which is exactly when tools
+ * run; `/name` works only because the human types it while idle). After a
+ * rename we therefore re-assert pi's title on `agent_end`, deferred so it
+ * lands after rpiv-warp's pop in the same event dispatch.
+ *
  * Never registers inside pi-subagents children: child sessions name
  * themselves out of the parent's control, and the parent's naming flow has
  * no business there.
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { basename } from "node:path";
+
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 
 /** Keeps names compact in the session picker and /resume search. */
@@ -39,10 +49,35 @@ const SetSessionNameParams = Type.Object({
 	),
 });
 
+/** Set on every successful rename; consumed by the agent_end title sync. */
+let pendingTitleSync = false;
+
+/**
+ * Mirrors pi core's updateTerminalTitle: `${APP_TITLE} - ${session} - ${repo}`,
+ * where APP_TITLE is pkg.piConfig?.name ?? "π". piConfig is not reachable from
+ * an installed extension, so a customized pi package name would need updating
+ * here — pi core's own later title writes (e.g. /name, restart) self-correct.
+ */
+function buildTitle(ctx: ExtensionContext, sessionName: string | undefined): string {
+	const project = basename(ctx.cwd);
+	return sessionName ? `π - ${sessionName} - ${project}` : `π - ${project}`;
+}
+
 export default function (pi: ExtensionAPI) {
 	if (process.env.PI_SUBAGENT_CHILD) {
 		return;
 	}
+
+	pi.on("agent_end", async (_event, ctx) => {
+		if (!pendingTitleSync) return;
+		pendingTitleSync = false;
+		const sessionName = pi.getSessionName()?.trim();
+		// Macrotask: runs after all synchronous agent_end handlers, i.e. after
+		// rpiv-warp's title pop, so the re-assert is the last write.
+		setTimeout(() => {
+			ctx?.ui?.setTitle?.(buildTitle(ctx, sessionName));
+		}, 0);
+	});
 
 	pi.registerTool({
 		name: "set_session_name",
@@ -75,6 +110,7 @@ export default function (pi: ExtensionAPI) {
 			}
 
 			pi.setSessionName(requested);
+			pendingTitleSync = true;
 			return {
 				content: [{ type: "text", text: `Session renamed to "${requested}".` }],
 				details: { renamed: true, name: requested },

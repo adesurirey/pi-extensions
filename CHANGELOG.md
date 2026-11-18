@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1]
+
+- `session-name-tool` — re-assert pi's tab title on `agent_end` after a rename, so the Warp tab reflects it despite rpiv-warp's spinner suffix (captured at `agent_start`) and title pop clobbering mid-run renames.
+
 ## [1.1.0]
 
 - `session-name-tool` — let the agent rename the current session (`set_session_name` tool); refuses on an existing name so the agent asks the human first.

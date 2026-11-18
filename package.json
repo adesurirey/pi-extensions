@@ -1,12 +1,14 @@
 {
   "name": "@adesurirey/pi-extensions",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Personal pi extensions: theme-sync, warp-session-launcher, warp-subagent-status, session-name-tool",
   "private": true,
   "dependencies": {
     "@juicesharp/rpiv-warp": "^2.15.0"
   },
   "pi": {
-    "extensions": ["extensions/*.ts"]
+    "extensions": [
+      "extensions/*.ts"
+    ]
   }
 }

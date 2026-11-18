@@ -59,6 +59,12 @@ Contract:
 - Already named (e.g. via `/name`) → the tool refuses and returns the current
   name; the agent asks the human and only retries with `force: true` on
   confirmation.
+- Warp tab: pi core updates the title on rename, but rpiv-warp's spinner
+  ticks a suffix captured at `agent_start` and pops the pre-rename title on
+  `agent_end` — both clobber a mid-run rename ( `/name` works only because
+  it's typed while idle). After a rename the extension re-asserts pi's title
+  on `agent_end`, deferred past rpiv-warp's pop. During the run the spinner
+  still shows the old suffix; it corrects when the turn completes.
 
 Never registers inside pi-subagents children. The aircall-skills repo's
 `investigate`, `implement`, `plan`, `release-microservice` and
