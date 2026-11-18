@@ -29,13 +29,15 @@
  */
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+// rpiv-warp's exports map only exposes the package root ("." → index.ts),
+// which is side-effect-free unless its default extension entry is invoked.
 import {
 	buildPromptSubmitPayload,
 	buildStopPayload,
+	detectWarpEnvironment,
 	serializePayload,
-} from "@juicesharp/rpiv-warp/payload.ts";
-import { detectWarpEnvironment } from "@juicesharp/rpiv-warp/protocol.ts";
-import { writeOSC777 } from "@juicesharp/rpiv-warp/warp-notify.ts";
+	writeOSC777,
+} from "@juicesharp/rpiv-warp";
 
 // ---------------------------------------------------------------------------
 // Tunables — single definition site
