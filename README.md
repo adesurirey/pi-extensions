@@ -45,3 +45,21 @@ make Warp emit `stop` + `idle_prompt` while work is still going. This
 extension tracks the `subagent:async-started` / `subagent:async-complete`
 events and re-emits rpiv-warp's own payload shapes until the last run
 completes. Requires `npm:@juicesharp/rpiv-warp` to be installed.
+
+### session-name-tool
+
+Lets the agent rename the current session via a `set_session_name` tool,
+wrapping pi's `setSessionName()`. pi has no built-in way for the agent itself
+to rename a session, and skills that start from a Jira ticket want the session
+named `NUM-8080-plan`-style at start, not LLM-generated.
+
+Contract:
+
+- Unnamed session → renamed directly.
+- Already named (e.g. via `/name`) → the tool refuses and returns the current
+  name; the agent asks the human and only retries with `force: true` on
+  confirmation.
+
+Never registers inside pi-subagents children. The aircall-skills repo's
+`investigate`, `implement`, `plan`, `release-microservice` and
+`dual-investigate` skills call this tool.

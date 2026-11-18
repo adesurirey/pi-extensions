@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0]
+
+- `session-name-tool` — let the agent rename the current session (`set_session_name` tool); refuses on an existing name so the agent asks the human first.
+
 ## [1.0.0]
 
 Initial release.
