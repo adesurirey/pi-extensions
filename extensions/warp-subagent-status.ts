@@ -33,7 +33,7 @@ import {
 	buildPromptSubmitPayload,
 	buildStopPayload,
 	serializePayload,
-} from "../npm/node_modules/@juicesharp/rpiv-warp/payload.ts";
+} from "@juicesharp/rpiv-warp/payload.ts";
 import { detectWarpEnvironment } from "@juicesharp/rpiv-warp/protocol.ts";
 import { writeOSC777 } from "@juicesharp/rpiv-warp/warp-notify.ts";
 
