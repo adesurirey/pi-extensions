@@ -29,15 +29,18 @@
  */
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-// rpiv-warp's exports map only exposes the package root ("." → index.ts),
-// which is side-effect-free unless its default extension entry is invoked.
+// Import via node_modules file paths: rpiv-warp's exports map only exposes the
+// package root, and jiti's interop drops named exports from it. These modules
+// are stateless (payload builders + OSC writer + env detection), so a copy in
+// this package's own node_modules is safe — only title-spinner.ts is stateful
+// and deliberately not imported (see header note about ticker races).
 import {
 	buildPromptSubmitPayload,
 	buildStopPayload,
-	detectWarpEnvironment,
 	serializePayload,
-	writeOSC777,
-} from "@juicesharp/rpiv-warp";
+} from "../node_modules/@juicesharp/rpiv-warp/payload.ts";
+import { detectWarpEnvironment } from "../node_modules/@juicesharp/rpiv-warp/protocol.ts";
+import { writeOSC777 } from "../node_modules/@juicesharp/rpiv-warp/warp-notify.ts";
 
 // ---------------------------------------------------------------------------
 // Tunables — single definition site

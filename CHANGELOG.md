@@ -8,6 +8,10 @@ Initial release.
 - `warp-session-launcher` — open new pi sessions in new Warp tabs from the agent
 - `warp-subagent-status` — keep Warp's active indicator honest while async subagents run
 
+## [1.0.4]
+
+- Reference rpiv-warp helpers through `node_modules` file paths — package-root imports lose named exports under jiti.
+
 ## [1.0.3]
 
 - Import rpiv-warp helpers from the package root — its exports map blocks subpath imports like `@juicesharp/rpiv-warp/payload.ts`.

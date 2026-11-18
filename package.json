@@ -1,6 +1,6 @@
 {
   "name": "@adesurirey/pi-extensions",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Personal pi extensions: theme-sync, warp-session-launcher, warp-subagent-status",
   "private": true,
   "dependencies": {
