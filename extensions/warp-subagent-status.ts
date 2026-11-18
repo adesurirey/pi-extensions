@@ -34,8 +34,8 @@ import {
 	buildStopPayload,
 	serializePayload,
 } from "../npm/node_modules/@juicesharp/rpiv-warp/payload.ts";
-import { detectWarpEnvironment } from "../npm/node_modules/@juicesharp/rpiv-warp/protocol.ts";
-import { writeOSC777 } from "../npm/node_modules/@juicesharp/rpiv-warp/warp-notify.ts";
+import { detectWarpEnvironment } from "@juicesharp/rpiv-warp/protocol.ts";
+import { writeOSC777 } from "@juicesharp/rpiv-warp/warp-notify.ts";
 
 // ---------------------------------------------------------------------------
 // Tunables — single definition site
